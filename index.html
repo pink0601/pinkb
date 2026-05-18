@@ -1124,7 +1124,6 @@
         <div id="dialogue-box-7">
             <div class="dialogue-text-7">一盏马灯，照亮了来时的路；<br>万千灯火，正照亮我们前行的方向。</div>
         </div>
-        <div class="swipe-hint" id="swipe-7">👆 上滑开启人设盲盒</div>
     </div>
     
     <!-- 第八幕：马灯人设盲盒 -->
@@ -1822,6 +1821,12 @@
                 currentPhase4 = 5;
                 document.getElementById('progress-container-4').style.opacity = '0';
                 guideText.style.display = 'none';
+                document.getElementById('touch-area-4').style.display = 'none';
+                // 文字出来后背景固定为第4张图
+                document.getElementById('bg-4-1').style.opacity = '0';
+                document.getElementById('bg-4-2').style.opacity = '0';
+                document.getElementById('bg-4-3').style.opacity = '0';
+                document.getElementById('bg-4-4').style.opacity = '1';
                 document.getElementById('warm-light').classList.add('active');
                 playSound4();
                 setTimeout(() => showTextAndDialogue4(), 1000);
@@ -2036,10 +2041,10 @@
         
         function showDialogue7() {
             document.getElementById('dialogue-box-7').classList.add('show');
+            // 第七幕结束后自动弹出第八幕
             setTimeout(() => {
-                document.getElementById('swipe-7').classList.add('show');
-                swipeEnabled = true;
-            }, 2500);
+                switchToScene(8);
+            }, 3000);
         }
         
         function playHeritageSound() {
