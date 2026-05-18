@@ -491,6 +491,7 @@
         }
         #bg-7-1 { background-image: url('7-1.png'); opacity: 1; }
         #bg-7-2 { background-image: url('7-2.png'); }
+        #bg-7-3 { background-image: url('7-3.png'); }
         
         #lantern-glow-7 {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -1115,6 +1116,7 @@
     <div id="scene7" class="scene">
         <div id="bg-7-1" class="bg-image-7"></div>
         <div id="bg-7-2" class="bg-image-7"></div>
+        <div id="bg-7-3" class="bg-image-7"></div>
         <div id="lantern-glow-7"></div>
         <div id="click-area-7"></div>
         <div id="click-hint-7">点击屏幕，点燃传承之火</div>
@@ -1986,9 +1988,9 @@
             }, 2000);
         }
         
-        // 第七幕
+        // 第七幕 - 3张图片交互
         let scene7Initialized = false;
-        let isTriggered7 = false;
+        let clickPhase7 = 0; // 0=未点击, 1=第一次, 2=第二次, 3=第三次完成
         
         function initScene7() {
             if (scene7Initialized) return;
@@ -2005,13 +2007,31 @@
         }
         
         function handleClick7(e) {
-            if (isTriggered7) return;
-            isTriggered7 = true;
-            document.getElementById('click-hint-7').classList.remove('show');
-            document.getElementById('click-hint-7').style.display = 'none';
-            playHeritageSound();
-            setTimeout(() => document.getElementById('bg-7-2').style.opacity = '1', 300);
-            setTimeout(() => showDialogue7(), 2000);
+            clickPhase7++;
+            
+            if (clickPhase7 === 1) {
+                // 第一次点击：7-1 → 7-2
+                document.getElementById('click-hint-7').textContent = '再次点击，传递灯火';
+                playHeritageSound();
+                setTimeout(() => {
+                    document.getElementById('bg-7-2').style.opacity = '1';
+                }, 300);
+            } else if (clickPhase7 === 2) {
+                // 第二次点击：7-2 → 7-3
+                document.getElementById('click-hint-7').textContent = '最后一次，点亮万家灯火';
+                playHeritageSound();
+                setTimeout(() => {
+                    document.getElementById('bg-7-2').style.opacity = '0';
+                    document.getElementById('bg-7-3').style.opacity = '1';
+                }, 300);
+            } else if (clickPhase7 === 3) {
+                // 第三次点击：完成，显示对话
+                document.getElementById('click-hint-7').classList.remove('show');
+                document.getElementById('click-hint-7').style.display = 'none';
+                document.getElementById('click-area-7').style.pointerEvents = 'none';
+                playHeritageSound();
+                setTimeout(() => showDialogue7(), 1000);
+            }
         }
         
         function showDialogue7() {
